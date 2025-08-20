@@ -9,11 +9,12 @@ import { ShowFormErrorsDirective } from '../../../../shared/directives/show-form
 import { AuthService, LoginResponse } from '../../services/auth.service';
 import { ErrorListComponent } from '../errorLists/errorList.component';
 import { CognitoService } from '../../services/cognito';
+import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ ReactiveFormsModule, ErrorListComponent],
+  imports: [ ReactiveFormsModule, ErrorListComponent, RouterLink, FooterComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   providers: [provideIcons({ heroUsers , heroHomeSolid})]
@@ -22,7 +23,8 @@ export class LoginComponent {
   loginForm: FormGroup;
   state = signal({
     loading: false,
-    submitted: false
+    submitted: false,
+    error: ''
   })
   isLogged = false;
   token: string | null = null;
@@ -36,11 +38,9 @@ export class LoginComponent {
     cognitoService.getJwtToken().then(token => {
       this.token = token;
       this.isLogged = !!token;
-      console.log('token:', token);
       if(this.isLogged){
         this.router.navigate(['/']);
       }
-
     });
   }
 
@@ -64,26 +64,44 @@ export class LoginComponent {
         return []; // Retorna un observable vacío o el que necesites
       })
     ).subscribe(value => {
-      console.log('Form changes:', value);
+      // Form changes logic here if needed
     });
   }
 
   onSubmit() {
-    this.state.update(state => ({ ...state, submitted: true }));
+    // Limpiar errores previos
+    this.state.update(state => ({ ...state, error: '', submitted: true }));
+    
     if (this.loginForm.valid) { 
-
+      // Activar estado de carga
+      this.state.update(state => ({ ...state, loading: true }));
+      
       this.cognitoService.signIn(this.loginForm.value.email, this.loginForm.value.password)
         .then(user => {
           console.log('Inicio de sesión exitoso:', user);
-
-      this.state.update(state => ({ ...state, loading: true, submitted: false }));
-      this.loginForm.reset();
+          // Redirigir al usuario
+          this.router.navigate(['/tasks']);
         })
         .catch(error => {
           console.error('Error en el inicio de sesión:', error);
+          // Mostrar error al usuario
+          let errorMessage = 'Error en el inicio de sesión. Verifica tus credenciales.';
+          
+          // Personalizar mensaje según el tipo de error
+          if (error.name === 'NotAuthorizedException') {
+            errorMessage = 'Usuario o contraseña incorrectos.';
+          } else if (error.name === 'UserNotConfirmedException') {
+            errorMessage = 'Por favor confirma tu cuenta antes de iniciar sesión.';
+          } else if (error.name === 'UserNotFoundException') {
+            errorMessage = 'Usuario no encontrado.';
+          }
+          
+          this.state.update(state => ({ ...state, error: errorMessage }));
+        })
+        .finally(() => {
+          // Desactivar estado de carga
+          this.state.update(state => ({ ...state, loading: false }));
         });
-
-
     } else {
       console.log('Form not valid', this.getErrorMessages(this.loginForm.get('email')));
     }

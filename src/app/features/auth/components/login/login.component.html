@@ -1,23 +1,149 @@
-<div class="flex flex-col">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="flex flex-col gap-2 max-w-sm mx-auto mt-20 p-6 rounded-lg shadow-md border border-gray-300 bg-neutral-200">
-            <div class="text-center mb-4 text-xl">
-                Login form
-            </div>
-            <div class="flex flex-col">
-                <label for="email" class="mb-2">Email:</label>
-                <input formControlName="email" type="email" id="email" class="mb-4 p-2 border border-gray-300 rounded" />
-                <app-error-component [errors]="getErrorMessages(loginForm.get('email'))" [submitted]="state().submitted"></app-error-component>
-            </div>
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-zinc-900 flex items-center justify-center p-4">
+    
+    <!-- Elementos decorativos flotantes -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 right-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 left-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl"></div>
+    </div>
 
-            <div class="flex flex-col">
-                <label for="password" class="mb-2">Password:</label>
-                <input formControlName="password" type="password" id="password" class="mb-4 p-2 border border-gray-300 rounded" />
-                <app-error-component [errors]="getErrorMessages(loginForm.get('password'))" [submitted]="state().submitted"></app-error-component>
+    <!-- Contenedor principal -->
+    <div class="relative z-10 w-full max-w-md">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-2xl">
+                <span class="text-white text-2xl">🔐</span>
             </div>
-
-            <button  type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Acceder</button>
+            <h1 class="text-3xl font-bold text-white mb-2">Bienvenido</h1>
+            <p class="text-white/70">Accede a tu cuenta para continuar</p>
         </div>
-    </form>
-   
+
+        <!-- Formulario -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl p-8 shadow-2xl relative">
+                
+                <!-- Overlay de carga -->
+                @if (state().loading) {
+                    <div class="absolute inset-0 backdrop-blur-sm bg-black/20 rounded-3xl z-10 flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-2"></div>
+                            <p class="text-white/80 text-sm">Verificando credenciales...</p>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Campo Email -->
+                <div class="mb-6">
+                    <label for="email" class="block text-white/90 text-sm font-medium mb-3">
+                        Usuario
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            formControlName="email" 
+                            type="text" 
+                            id="email" 
+                            placeholder="Admin"
+                            [disabled]="state().loading"
+                            class="w-full pl-12 pr-4 py-4 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl 
+                                   text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 
+                                   focus:border-blue-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" />
+                    </div>
+                    <app-error-component [errors]="getErrorMessages(loginForm.get('email'))" [submitted]="state().submitted"></app-error-component>
+                </div>
+
+                <!-- Campo Password -->
+                <div class="mb-8">
+                    <label for="password" class="block text-white/90 text-sm font-medium mb-3">
+                        Contraseña
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            formControlName="password" 
+                            type="password" 
+                            id="password" 
+                            placeholder="••••••••"
+                            [disabled]="state().loading"
+                            class="w-full pl-12 pr-4 py-4 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl 
+                                   text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 
+                                   focus:border-blue-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" />
+                    </div>
+                    <app-error-component [errors]="getErrorMessages(loginForm.get('password'))" [submitted]="state().submitted"></app-error-component>
+                </div>
+
+
+                <!-- Mensaje de error -->
+                @if (state().error) {
+                    <div class="mb-6 backdrop-blur-xl bg-red-500/20 border border-red-400/30 rounded-2xl p-4">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-red-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-red-100 text-sm font-medium">{{ state().error }}</p>
+                        </div>
+                    </div>
+                }
+
+                <!-- Botón de envío -->
+                <button 
+                    type="submit" 
+                    [disabled]="state().loading || !loginForm.valid"
+                    class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 
+                           text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 
+                           hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 
+                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer">
+                    
+                    @if (state().loading) {
+                        <!-- Estado de carga -->
+                        <span class="flex items-center justify-center space-x-3">
+                            <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>Iniciando sesión...</span>
+                        </span>
+                    } @else {
+                        <!-- Estado normal -->
+                        <span class="flex items-center justify-center space-x-2">
+                            <span>Iniciar sesión</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </span>
+                    }
+                </button>
+
+                <!-- Separador -->
+                <div class="relative my-8">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-white/20"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                    </div>
+                </div>
+                
+                <!-- Link a registro -->
+                <div class="text-center">
+                    <p class="text-white/70">
+                        ¿No tienes cuenta? 
+                        <a routerLink="/auth/register" 
+                           [class.pointer-events-none]="state().loading"
+                           [class.opacity-50]="state().loading"
+                           class="cursor-pointer text-blue-400 hover:text-blue-300 font-medium transition-colors ml-1">
+                            Regístrate aquí
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <app-footer></app-footer>
 </div>

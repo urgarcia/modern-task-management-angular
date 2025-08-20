@@ -1,12 +1,15 @@
 import { Component, signal, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
+import { Location } from '@angular/common';
+import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
+  imports: [ReactiveFormsModule, FooterComponent],
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss']
 })
@@ -21,7 +24,8 @@ export class TaskFormComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private location: Location
   ) {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(50)]],
@@ -46,6 +50,10 @@ export class TaskFormComponent implements OnInit {
         }
       });
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   onSubmit() {

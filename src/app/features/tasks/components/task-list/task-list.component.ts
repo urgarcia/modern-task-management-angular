@@ -1,12 +1,14 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+import { CognitoService } from '../../../auth/services/cognito';
+import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, FooterComponent],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
@@ -14,8 +16,13 @@ export class TaskListComponent implements OnInit {
   tasks = signal<Task[]>([]);
   loading = signal(false);
   error = signal('');
+  loggingOut = signal(false);
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private cognitoService: CognitoService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loading.set(true);
@@ -40,5 +47,18 @@ export class TaskListComponent implements OnInit {
         this.error.set('No se pudo eliminar la tarea');
       }
     });
+  }
+
+  async logout() {
+    this.loggingOut.set(true);
+    try {
+      await this.cognitoService.signOut();
+      this.router.navigate(['/auth/login']);
+    } catch (error) {
+      this.error.set('Error al cerrar sesión');
+      console.error('Error durante el logout:', error);
+    } finally {
+      this.loggingOut.set(false);
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Amplify } from 'aws-amplify';
-import { signIn,signUp, getCurrentUser, SignUpOutput, fetchAuthSession } from 'aws-amplify/auth';
+import { signIn, signUp, signOut, getCurrentUser, SignUpOutput, fetchAuthSession } from 'aws-amplify/auth';
 import { environment } from '../../../../environments/environment';
 
 export interface IUser {
@@ -30,7 +30,6 @@ export class CognitoService {
   async signIn(username: string, password: string) {
     try {
       const user = await signIn({ username, password }); // Cambio de Auth.signIn a signIn
-      console.log('Inicio de sesión exitoso:', user);
       return user;
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
@@ -50,7 +49,6 @@ export class CognitoService {
           }
         }
       });
-      console.log('Registro exitoso:', user);
       return user;
     } catch (error) {
       console.error('Error en el registro:', error);
@@ -68,20 +66,27 @@ export class CognitoService {
   async getJwtToken() {
     try {
       const session = await fetchAuthSession();
-      console.log('Sesión completa:', session);
-      console.log('Tokens disponibles:', session.tokens);
       
       // Intentar primero accessToken
       if (session.tokens && session.tokens.accessToken) {
-        console.log('AccessToken encontrado:', session.tokens.accessToken.toString());
         return session.tokens.accessToken.toString();
       }
       
-      console.log('No se encontró ningún token válido');
       return null;
     } catch (error) {
       console.error('Error al obtener la sesión:', error);
       return null;
+    }
+  }
+
+  // Cerrar sesión
+  async signOut() {
+    try {
+      await signOut();
+      return true;
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      throw error;
     }
   }
 

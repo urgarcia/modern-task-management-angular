@@ -5,9 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:static": "ng build --configuration=static",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:angular-example": "node dist/angular-example/server/server.mjs"
+    "serve:ssr:angular-example": "node dist/angular-example/server/server.mjs",
+    "deploy": "./deploy/deploy-to-ec2.sh",
+    "deploy:build": "npm run build:static && ./deploy/deploy-to-ec2.sh"
   },
   "prettier": {
     "overrides": [

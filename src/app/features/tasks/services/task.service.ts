@@ -1,3 +1,11 @@
+/**
+ * @fileoverview Servicio de gestión de tareas
+ * @author Uriel García
+ * @description Servicio para el manejo CRUD de tareas - Prueba Técnica
+ * @version 1.0.0
+ * @created 2025-08-20
+ */
+
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../../core/services/httpService';
 import { Observable } from 'rxjs';

@@ -1,3 +1,42 @@
-.bg-gradient-to-br {
-  background: linear-gradient(135deg, #4f046e 0%, #7c3aed 60%, #ff9800 100%);
+// Utilidades adicionales para glassmorphism y animaciones suaves
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+// Mejora para el borde del spinner de carga
+.border-3 {
+  border-width: 3px;
+}
+
+// Sombra extra fuerte para elementos especiales
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+}
+
+// Suavizar transiciones en dispositivos móviles
+@media (prefers-reduced-motion: reduce) {
+  .transition-all {
+    transition: none;
+  }
+  
+  .animate-spin {
+    animation: none;
+  }
+  
+  .hover\\:scale-105:hover,
+  .hover\\:scale-110:hover {
+    transform: none;
+  }
 }

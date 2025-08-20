@@ -1,3 +1,94 @@
-.bg-gradient-to-br {
-  background: linear-gradient(135deg, #4f046e 0%, #7c3aed 60%, #ff9800 100%);
+/* Estilos profesionales para Task Form */
+
+// Mejoras de accesibilidad y animaciones
+input:focus, textarea:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+// Animación de entrada suave
+.backdrop-blur-xl {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Efectos hover para elementos interactivos
+button:hover {
+  text-shadow: 0 0 8px currentColor;
+}
+
+// Checkbox personalizado
+input[type="checkbox"]:checked + div {
+  animation: checkboxPop 0.3s ease;
+}
+
+@keyframes checkboxPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+// Contador de caracteres
+.character-counter {
+  transition: color 0.3s ease;
+}
+
+// Validación visual para campos
+input:invalid:not(:focus):not(:placeholder-shown),
+textarea:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2);
+}
+
+input:valid:not(:placeholder-shown),
+textarea:valid:not(:placeholder-shown) {
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.2);
+}
+
+// Mejoras para pantallas pequeñas
+@media (max-width: 768px) {
+  .backdrop-blur-xl {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Estados de loading
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// Asegurar compatibilidad con backdrop-filter
+.backdrop-blur-xl {
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+// Smooth transitions para botones disabled
+button:disabled {
+  transition: all 0.3s ease;
 }
