@@ -25,7 +25,8 @@ export class LoginComponent {
     loading: false,
     submitted: false,
     error: ''
-  })
+  });
+  welcomeMessage = signal<string | null>(null);
   isLogged = false;
   token: string | null = null;
 
@@ -35,6 +36,22 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false],
     });
+    
+    // Verificar si hay un mensaje de bienvenida desde la verificación
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      const message = navigation.extras.state['message'];
+      const username = navigation.extras.state['username'];
+      if (message) {
+        this.welcomeMessage.set(message);
+        // Limpiar el mensaje después de 5 segundos
+        setTimeout(() => this.welcomeMessage.set(null), 5000);
+      }
+      if (username) {
+        this.loginForm.patchValue({ email: username });
+      }
+    }
+    
     cognitoService.getJwtToken().then(token => {
       this.token = token;
       this.isLogged = !!token;

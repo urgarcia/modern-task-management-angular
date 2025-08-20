@@ -1,0 +1,177 @@
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    
+    <!-- Background con efectos glassmorphism -->
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+    
+    <!-- Efectos de fondo animados -->
+    <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+    <div class="absolute top-1/3 right-1/4 w-72 h-72 bg-cyan-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000"></div>
+    <div class="absolute bottom-1/4 left-1/3 w-72 h-72 bg-indigo-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000"></div>
+    
+    <!-- Container principal -->
+    <div class="max-w-md w-full space-y-8 relative z-10">
+        
+        <!-- Header -->
+        <div class="text-center">
+            <div class="mx-auto h-20 w-20 backdrop-blur-xl bg-white/10 border border-white/20 rounded-full flex items-center justify-center mb-6 shadow-2xl">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-white mb-2">
+                Verifica tu email
+            </h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Hemos enviado un código de verificación de 6 dígitos a<br>
+                <span class="text-blue-400 font-medium">{{ email() }}</span>
+            </p>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="verifyForm" (ngSubmit)="onSubmit()">
+            <div class="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl p-8 shadow-2xl">
+                
+                <!-- Campo de código de verificación -->
+                <div class="mb-6">
+                    <label for="verificationCode" class="block text-white/90 text-sm font-medium mb-3">
+                        Código de verificación
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            formControlName="verificationCode" 
+                            type="text" 
+                            id="verificationCode" 
+                            placeholder="123456"
+                            maxlength="6"
+                            (input)="onInputChange($event)"
+                            [class.border-red-500]="verificationCode?.invalid && verificationCode?.touched"
+                            [class.border-green-500]="verificationCode?.valid && verificationCode?.touched"
+                            class="w-full pl-12 pr-4 py-4 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl 
+                                   text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 
+                                   focus:border-blue-500/50 transition-all duration-300 text-center text-lg font-mono tracking-widest" />
+                    </div>
+                    
+                    <!-- Errores del código -->
+                    @if (getCodeErrorMessage().length > 0) {
+                        <div class="mt-3 space-y-2">
+                            @for (error of getCodeErrorMessage(); track $index) {
+                                <div class="flex items-center space-x-2 backdrop-blur-xl bg-red-500/20 border border-red-400/30 
+                                            rounded-xl px-3 py-2 text-red-200 text-sm">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>{{ error }}</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <!-- Mensaje de ayuda -->
+                <div class="mb-6 backdrop-blur-xl bg-blue-500/10 border border-blue-400/20 rounded-2xl p-4">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="text-blue-200 text-sm">
+                            <p class="font-medium mb-1">¿No encuentras el código?</p>
+                            <ul class="text-xs space-y-1 text-blue-300">
+                                <li>• Revisa tu bandeja de entrada y spam</li>
+                                <li>• El código es válido por 15 minutos</li>
+                                <li>• Solo acepta números (6 dígitos)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensajes de error y éxito -->
+                @if (error()) {
+                    <div class="mb-6 flex items-center space-x-2 backdrop-blur-xl bg-red-500/20 border border-red-400/30 
+                                rounded-xl px-4 py-3 text-red-200">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>{{ error() }}</span>
+                    </div>
+                }
+
+                @if (success()) {
+                    <div class="mb-6 flex items-center space-x-2 backdrop-blur-xl bg-green-500/20 border border-green-400/30 
+                                rounded-xl px-4 py-3 text-green-200">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>{{ success() }}</span>
+                    </div>
+                }
+
+                <!-- Botón de verificación -->
+                <button 
+                    type="submit" 
+                    [disabled]="!isFormValid() || loading()"
+                    class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 
+                           text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 
+                           hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 
+                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mb-4">
+                    <span class="flex items-center justify-center space-x-2">
+                        @if (loading()) {
+                            <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>Verificando...</span>
+                        } @else {
+                            <span>Verificar código</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        }
+                    </span>
+                </button>
+
+                <!-- Botón para reenviar código -->
+                <button 
+                    type="button"
+                    (click)="resendCode()"
+                    [disabled]="resendingCode()"
+                    class="w-full backdrop-blur-xl bg-white/10 border border-white/20 hover:bg-white/20 
+                           text-white font-medium py-3 px-6 rounded-2xl transition-all duration-300 
+                           hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 
+                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mb-6">
+                    <span class="flex items-center justify-center space-x-2">
+                        @if (resendingCode()) {
+                            <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>Reenviando...</span>
+                        } @else {
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            <span>Reenviar código</span>
+                        }
+                    </span>
+                </button>
+
+                <!-- Links de navegación -->
+                <div class="text-center space-y-3">
+                    <button 
+                        type="button"
+                        (click)="goBackToRegister()"
+                        class="text-slate-300 hover:text-white text-sm transition-colors">
+                        ← Volver al registro
+                    </button>
+                    
+                    <p class="text-white/70 text-sm">
+                        ¿Ya tienes cuenta? 
+                        <a routerLink="/auth/login" class="text-blue-400 hover:text-blue-300 font-medium transition-colors ml-1">
+                            Inicia sesión
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

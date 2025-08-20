@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Amplify } from 'aws-amplify';
-import { signIn, signUp, signOut, getCurrentUser, SignUpOutput, fetchAuthSession } from 'aws-amplify/auth';
+import { signIn, signUp, signOut, getCurrentUser, SignUpOutput, fetchAuthSession, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 import { environment } from '../../../../environments/environment';
 
 export interface IUser {
@@ -52,6 +52,33 @@ export class CognitoService {
       return user;
     } catch (error) {
       console.error('Error en el registro:', error);
+      throw error;
+    }
+  }
+
+  // Confirmar registro con código de verificación
+  async confirmSignUp(username: string, code: string) {
+    try {
+      const result = await confirmSignUp({
+        username,
+        confirmationCode: code
+      });
+      return result;
+    } catch (error) {
+      console.error('Error al confirmar el registro:', error);
+      throw error;
+    }
+  }
+
+  // Reenviar código de confirmación
+  async resendConfirmationCode(username: string) {
+    try {
+      const result = await resendSignUpCode({
+        username
+      });
+      return result;
+    } catch (error) {
+      console.error('Error al reenviar código:', error);
       throw error;
     }
   }

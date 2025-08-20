@@ -1,0 +1,68 @@
+/**
+ * @fileoverview Estilos para el componente de verificación de email
+ * @description Estilos glassmorphism y animaciones para la verificación de código
+ * @author Uriel García
+ * @created 2025-08-20
+ */
+
+/* Animaciones customizadas */
+@keyframes pulse-delayed {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+/* Clases de utilidad para delays de animación */
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Efectos hover mejorados */
+button:hover:not(:disabled) {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.04),
+              0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Estilo para el input de código con espaciado */
+input[type="text"]:focus {
+  letter-spacing: 0.2em;
+}
+
+/* Estados de validación mejorados */
+.border-green-500 {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.border-red-500 {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Mejoras de accesibilidad */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Responsive improvements */
+@media (max-width: 640px) {
+  .backdrop-blur-xl {
+    backdrop-filter: blur(12px);
+  }
+  
+  .rounded-3xl {
+    border-radius: 1.5rem;
+  }
+}

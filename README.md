@@ -23,8 +23,10 @@
 ### 🔐 Autenticación
 - **AWS Cognito** integrado para gestión de usuarios
 - **Registro de usuarios** con validación avanzada de contraseñas
+- **Verificación por email** con código de confirmación de 6 dígitos
 - **Login seguro** con manejo de sesiones
 - **Guards de autenticación** para proteger rutas
+- **Flujo completo** de registro → verificación → login
 
 ### 📋 Gestión de Tareas
 - **CRUD completo** de tareas

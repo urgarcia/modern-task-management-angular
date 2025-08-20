@@ -150,12 +150,17 @@ export class RegisterComponent {
       
       const response = await this.cognitoService.signUp(email, password, firstName, username);
       
-      this.success.set('¡Cuenta creada exitosamente! Revisa tu email para confirmar tu cuenta.');
+      this.success.set('¡Cuenta creada exitosamente! Revisa tu email para el código de verificación.');
       
-      // Redirigir al login después de 3 segundos
+      // Redirigir a verificación de email después de 2 segundos
       setTimeout(() => {
-        this.router.navigate(['/auth/login']);
-      }, 3000);
+        this.router.navigate(['/auth/verify-email'], {
+          state: { 
+            username: username,
+            email: email 
+          }
+        });
+      }, 2000);
       
     } catch (error: any) {
       console.error('Error en el registro:', error);
