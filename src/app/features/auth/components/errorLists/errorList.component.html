@@ -1,0 +1,7 @@
+@if (submitted) {
+<div class="flex flex-col text-red-500 gap-1 mt-[-1rem] ">
+    @for (item of errors; track $index) {
+        <div>{{ item }}</div>
+    }
+</div>
+}

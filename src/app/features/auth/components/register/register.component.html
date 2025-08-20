@@ -1,0 +1,51 @@
+<div class="flex flex-col">
+    <div class="flex rounded rounded-lg bg-neutral-200 border border-gray-300 absolute top-5 left-5 w-12 h-12 justify-center items-center cursor-pointer hover:bg-neutral-300 transition-all duration-300"
+    routerLink="/">
+        <ng-icon name="heroHomeSolid" />
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="flex flex-col gap-4 max-w-lg mx-auto mt-20 p-6 rounded-lg shadow-md border border-gray-300 bg-neutral-200">
+            <div class="text-center mb-4 text-xl">
+                Register Form
+            </div>
+
+            <!-- Flex container with flex-wrap -->
+            <div class="flex flex-wrap gap-4">
+                <!-- Nombre -->
+                <div class="flex flex-col" style="flex: 1 1 calc(50% - 1rem); min-width: 200px;">
+                    <label for="firstName" class="mb-2">Nombre:</label>
+                    <input formControlName="firstName" type="text" id="firstName" class="p-2 border border-gray-300 rounded" />
+                </div>
+
+                <!-- Apellido -->
+                <div class="flex flex-col" style="flex: 1 1 calc(50% - 1rem); min-width: 200px;">
+                    <label for="username" class="mb-2">username:</label>
+                    <input formControlName="username" type="text" id="username" class="p-2 border border-gray-300 rounded" />
+                </div>
+
+                <!-- Email -->
+                <div class="flex flex-col" style="flex: 1 1 calc(100% - 1rem); min-width: 200px;">
+                    <label for="email" class="mb-2">Email:</label>
+                    <input formControlName="email" type="email" id="email" class="p-2 border border-gray-300 rounded" />
+                </div>
+
+                <!-- Password -->
+                <div class="flex flex-col" style="flex: 1 1 calc(50% - 1rem); min-width: 200px;">
+                    <label for="password" class="mb-2">Password:</label>
+                    <input formControlName="password" type="password" id="password" class="p-2 border border-gray-300 rounded" />
+                </div>
+
+                <!-- Repeat Password -->
+                <div class="flex flex-col" style="flex: 1 1 calc(50% - 1rem); min-width: 200px;">
+                    <label for="repeatPassword" class="mb-2">Repeat Password:</label>
+                    <input formControlName="repeatPassword" type="password" id="repeatPassword" class="p-2 border border-gray-300 rounded" />
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Register
+            </button>
+        </div>
+    </form>
+</div>

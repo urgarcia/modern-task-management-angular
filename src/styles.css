@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body{
+    background-color: theme('colors.neutral.300'); /* Usando el color gris de Tailwind */
+}

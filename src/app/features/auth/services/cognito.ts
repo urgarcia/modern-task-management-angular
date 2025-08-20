@@ -1,0 +1,88 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Amplify } from 'aws-amplify';
+import { signIn,signUp, getCurrentUser, SignUpOutput, fetchAuthSession } from 'aws-amplify/auth';
+import { environment } from '../../../../environments/environment';
+
+export interface IUser {
+  email: string;
+  password: string;
+  code: string;
+  name: string;
+}
+@Injectable({
+  providedIn: 'root'
+})
+export class CognitoService {
+  
+  constructor(){
+    Amplify.configure({
+      Auth: {
+        Cognito: {
+          userPoolId: environment.cognito.userPoolId,
+          userPoolClientId: environment.cognito.userPoolWebClientId
+        }
+      }
+    });
+  }
+
+  // Inicio de sesión
+  async signIn(username: string, password: string) {
+    try {
+      const user = await signIn({ username, password }); // Cambio de Auth.signIn a signIn
+      console.log('Inicio de sesión exitoso:', user);
+      return user;
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error);
+      throw error;
+    }
+  }
+  // Registro de usuario
+  async signUp(email: string, password: string, name: string, username: string) {
+    try {
+      const user = await signUp({
+        username,
+        password,
+        options:{
+          userAttributes: {
+            email,
+            name
+          }
+        }
+      });
+      console.log('Registro exitoso:', user);
+      return user;
+    } catch (error) {
+      console.error('Error en el registro:', error);
+      throw error;
+    }
+  }
+
+  //funcion para ver si esta logeado
+  async isLoggedIn(): Promise<boolean> {
+    const token = await this.getJwtToken();
+    return !!token;
+  }
+
+  // funcion para obtener el token
+  async getJwtToken() {
+    try {
+      const session = await fetchAuthSession();
+      console.log('Sesión completa:', session);
+      console.log('Tokens disponibles:', session.tokens);
+      
+      // Intentar primero accessToken
+      if (session.tokens && session.tokens.accessToken) {
+        console.log('AccessToken encontrado:', session.tokens.accessToken.toString());
+        return session.tokens.accessToken.toString();
+      }
+      
+      console.log('No se encontró ningún token válido');
+      return null;
+    } catch (error) {
+      console.error('Error al obtener la sesión:', error);
+      return null;
+    }
+  }
+
+}
