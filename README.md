@@ -9,7 +9,7 @@
 
 ## 📱 Demo en Vivo
 
-🔗 **[Ver aplicación en vivo](http://tu-ip-ec2-aqui)** *(actualizar después del deployment)*
+🔗 **[Ver aplicación en vivo](http://3.80.68.247/)** *(actualizar después del deployment)*
 
 ## ✨ Características Principales
 
